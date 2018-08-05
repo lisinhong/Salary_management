@@ -1,0 +1,190 @@
+*
+  box-sizing: border-box
+  
+p
+  margin: 0
+
+body
+  // background-color: #F1FAEE
+
+.salary-table
+  display: flex
+  justify-content: center
+
+.add-input-container
+  display: flex
+  justify-content: center
+  align-items: center
+  margin: 80px 0
+  position: relative
+  &:after
+    content: ""
+    display: block
+    position: absolute
+    bottom: -40px
+    width: 950px
+    border: 1px solid #0199C4
+  input
+    border: 3px solid #01BAEF
+    padding: 14px 10px
+    color: #01BAEF
+    background-color: transparent
+    font-size: 18px 
+    margin: 0 20px
+    cursor: pointer
+    transition: all 0.2s 
+    width: 150px
+    &:hover
+      transform: scale(1.1, 1.1)
+      box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3)
+
+.member-container 
+  margin: 50px auto
+
+.table-header
+  display: flex
+  align-items: center
+  > div
+    flex: 0 0 250px
+    text-align: center
+    font-size: 20px
+    padding: 8px 10px
+    color: #0B4F6C
+    background-color: #FBFBFF
+    font-weight: 500
+    &:nth-child(2n)
+      background-color: #c9ecf2
+
+.table-content
+  display: flex
+  flex: 0 0 950px
+  width: 950px
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1)
+
+.table-col-date
+  flex: 0 0 200px
+  .table-header 
+    div
+      flex: 0 0 200px
+      background-color: #2e3347
+      color: #ffffff
+
+.table-date
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  background-color: #2e3347
+  color: #ffffff
+  > *
+    margin: 4px
+  input
+    text-align: center
+    font-size: 16px
+    color: #ffffff
+    border: none
+    border-bottom: 1px solid #ffffff
+    background: none
+    width: 110px
+    padding: 6px
+    cursor: pointer
+
+.table-date, 
+.table-detail
+  height: 160px
+  padding: 5px 10px
+
+.table-col-detail
+  flex: 0 0 750px
+  overflow: overlay
+
+.table-row
+  display: flex
+  > div
+    flex: 0 0 250px
+    font-size: 18px
+    text-align: center
+    padding: 5px 10px
+
+.table-detail
+  background-color: #FBFBFF
+  &:nth-child(2n)
+    background-color: #c9ecf2
+  p
+    display: flex
+    justify-content: space-between
+    color: #0B4F6C
+    align-items: center
+    &:last-child 
+      flex-direction: column
+      align-items: flex-start
+      textarea
+        width: 100%
+        resize: none
+  input,
+  textarea
+    font-size: 14px
+    color: #0B4F6C
+    border: 1px solid
+    background: none
+    padding: 4px 6px
+    border-radius: 2px
+  input
+    &[type="number"]
+      text-align: right
+      padding: 4px 0
+
+.date-input-container,
+.member-input-container
+  display: flex
+  justify-content: center
+  align-items: center
+  height: 100%
+  form
+    display: flex
+    flex-direction: column
+    justify-content: space-around
+    width: 100%
+    max-width: 350px
+    height: 100%
+    margin: 0
+    label 
+      font-weight: 500
+      font-size: 16px
+      color: #0B4F6C
+    .title
+      font-size: 20px
+      text-align: center
+      color: #0B4F6C
+      font-weight: 500
+    .react-datepicker-wrapper
+      width: 100%
+      *
+        width: 100%
+  .input-container  
+    input
+      width: 100%
+      font-size: 14px
+      color: #0B4F6C
+      border: 1px solid
+      background: none
+      padding: 4px 6px
+      border-radius: 2px
+      margin-bottom: 20px
+.submit-container
+  display: flex
+  justify-content: space-around
+  input
+    flex: 0 1 100px
+    cursor: pointer
+    font-size: 16px
+    transition: all 0.2s
+    border: 1px solid
+    border-radius: 2px
+    padding: 5px 10px
+    &:hover
+      transform: scale(1.1, 1.1)
+      box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3)
+  input[type="submit"]
+    background-color: #0199C4
+    color: #0B4F6C
