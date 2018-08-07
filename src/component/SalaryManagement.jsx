@@ -19,6 +19,7 @@ export default class SalaryManagement extends Component {
     this.addDateRange = this.addDateRange.bind(this);
     this.updateDateRange = this.updateDateRange.bind(this);
     this.updateDetailInfo = this.updateDetailInfo.bind(this);
+    this.updateMemberList = this.updateMemberList.bind(this);
     this.mountDateInput = this.mountDateInput.bind(this);
     this.unmountDateInput = this.unmountDateInput.bind(this);
     this.mountMemberInput = this.mountMemberInput.bind(this);
@@ -88,6 +89,20 @@ export default class SalaryManagement extends Component {
       salaryDetail: newSalaryDetail
     })
   }
+  updateMemberList(memberIndex, member) {
+    const memberList = this.state.memberList;
+    const salaryDetail = this.state.salaryDetail;
+    let newSalaryDetail = [];
+    memberList[memberIndex] = member;
+    newSalaryDetail = salaryDetail.map((detail) => {
+      detail.info[memberIndex].name = member;
+      return detail;
+    })
+    this.setState({
+      memberList: memberList,
+      salaryDetail: newSalaryDetail
+    })
+  }
   mountDateInput() {
     this.setState({
       isAddingDate: true
@@ -117,14 +132,15 @@ export default class SalaryManagement extends Component {
     return (
       <div>
         <div className="add-input-container">
-          <input type="button" value="New Date" onClick={this.mountDateInput} />
-          <input type="button" value="New Member" onClick={this.mountMemberInput} />
+          <input type="button" value="NEW DATE" onClick={this.mountDateInput} />
+          <input type="button" value="NEW MEMBER" onClick={this.mountMemberInput} />
         </div>
         <SalaryTable
           memberList={this.state.memberList}
           salaryDetail={this.state.salaryDetail}
           updateDetailInfo={this.updateDetailInfo}
-          updateDateRange={this.updateDateRange} />
+          updateDateRange={this.updateDateRange}
+          updateMemberList={this.updateMemberList} />
         <Modal
           visible={this.state.isAddingDate}
           width="400"

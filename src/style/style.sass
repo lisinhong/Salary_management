@@ -5,7 +5,7 @@ p
   margin: 0
 
 body
-  // background-color: #F1FAEE
+  padding: 40px
 
 .salary-table
   display: flex
@@ -15,7 +15,7 @@ body
   display: flex
   justify-content: center
   align-items: center
-  margin: 80px 0
+  margin-bottom: 80px
   position: relative
   &:after
     content: ""
@@ -34,6 +34,7 @@ body
     cursor: pointer
     transition: all 0.2s 
     width: 150px
+    font-weight: 500
     &:hover
       transform: scale(1.1, 1.1)
       box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3)
@@ -45,15 +46,24 @@ body
   display: flex
   align-items: center
   > div
+    display: flex
+    justify-content: center
+    align-items: center
     flex: 0 0 250px
-    text-align: center
-    font-size: 20px
-    padding: 8px 10px
-    color: #0B4F6C
     background-color: #FBFBFF
-    font-weight: 500
+    height: 50px
     &:nth-child(2n)
       background-color: #c9ecf2
+    input
+      background-color: transparent
+      border: none
+      border-bottom: 1px solid
+      color: #0B4F6C
+      font-weight: 500
+      width: 60%
+      padding: 6px
+      text-align: center
+      font-size: 20px
 
 .table-content
   display: flex

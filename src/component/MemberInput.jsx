@@ -32,8 +32,8 @@ export default class MemberInput extends Component {
             <input type="text" id="input-member" value={this.state.inputValue} onChange={this.handleInputChange} />
           </div>
           <div className="submit-container">
-            <input type="submit" value="Add" />
-            <input type="button" value="Cancel" onClick={this.props.unmountMemberInput} />
+            <input type="submit" value="SUBMIT" />
+            <input type="button" value="CANCEL" onClick={this.props.unmountMemberInput} />
           </div>
         </form>
       </div>

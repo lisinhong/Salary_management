@@ -61,8 +61,8 @@ export default class DateRange extends Component {
               dateFormat='YYYY-MM-DD' />
           </div>
           <div className="submit-container">
-            <input type="submit" value="Add" />
-            <input type="button" value="Cancel" onClick={this.props.unmountDateInput} />
+            <input type="submit" value="SUBMIT" />
+            <input type="button" value="CANCEL" onClick={this.props.unmountDateInput} />
           </div>
         </form>
       </div>

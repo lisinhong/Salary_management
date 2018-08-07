@@ -25,7 +25,7 @@ export default class SalaryTable extends Component {
       <div className="salary-table">
         <div className="table-content">
           <div className="table-col-date">
-            <div className="table-header"><div>Date</div></div>
+            <div className="table-header"><div></div></div>
             {
               salaryDetail.map((detail, detailIndex) => {
                 return (
@@ -54,7 +54,15 @@ export default class SalaryTable extends Component {
             <div className="table-header">
               {
                 memberList.map((member, memberIndex) => {
-                  return <div key={`member-${memberIndex}`}>{member}</div>
+                  return (
+                    <div key={`member-${memberIndex}`}>
+                      <input 
+                      type="text"
+                      value={member}
+                      placeholder="Member Name"
+                      onChange={(e) => {this.props.updateMemberList(memberIndex, e.target.value)}} />
+                    </div>
+                  )
                 })
               }
             </div>
