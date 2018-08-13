@@ -1,20 +1,32 @@
 import React, { Component } from 'react';
 import update from 'immutability-helper';
-import moment from 'moment';
 import SalaryTable from './SalaryTable.jsx';
 import DateInput from './DateInput.jsx';
 import MemberInput from './MemberInput.jsx';
 import Modal from 'react-awesome-modal';
+import firebase from 'firebase';
+import moment from 'moment';
 
 export default class SalaryManagement extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      memberList: ['mary', 'bob', 'alice', 'leo'],
+      memberList: [],
       salaryDetail: [], // [{ sd, ed, info: [{ name, salary, isSent, isReceived, remarks }]}]
+      isLoading: true,
       isAddingDate: false,
-      isAddingMember: false
+      isAddingMember: false,
     };
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyCUhIyOZG7io3QM-X6SceWpu_v1WeWcAZA",
+      authDomain: "salary-management-dc5d5.firebaseapp.com",
+      databaseURL: "https://salary-management-dc5d5.firebaseio.com",
+      projectId: "salary-management-dc5d5",
+      storageBucket: "salary-management-dc5d5.appspot.com",
+      messagingSenderId: "590692047198"
+    };
+    firebase.initializeApp(config);
     this.addMember = this.addMember.bind(this);
     this.addDateRange = this.addDateRange.bind(this);
     this.updateDateRange = this.updateDateRange.bind(this);
@@ -25,9 +37,18 @@ export default class SalaryManagement extends Component {
     this.mountMemberInput = this.mountMemberInput.bind(this);
     this.unmountMemberInput = this.unmountMemberInput.bind(this);
   }
+  updateDbMemberList(memberList) {
+    const dbMembers = firebase.database().ref('/members');
+    dbMembers.set(memberList);
+  }
+  updateDbSalaryDetail(salaryDetail) {
+    const dbSalaryDetail = firebase.database().ref('/salary-detail');
+    dbSalaryDetail.set(salaryDetail);
+  }
   addMember(name) {
     const memberList = this.state.memberList;
     const salaryDetail = this.state.salaryDetail;
+    const newSalaryDetail = [...salaryDetail];
     const newMemberInfo = {
       name: name,
       salary: 0,
@@ -35,19 +56,22 @@ export default class SalaryManagement extends Component {
       isReceived: false,
       remarks: ''
     };
-    memberList.push(name);
-    salaryDetail.forEach((detail) => {
+    newSalaryDetail.forEach((detail) => {
       detail.info.push(newMemberInfo);
-    })
+    });
     this.setState({
       isAddingMember: false,
-      memberList: memberList,
-      salaryDetail: salaryDetail
+      memberList: [...memberList, name],
+      salaryDetail: newSalaryDetail
+    }, () => {
+      this.updateDbMemberList(this.state.memberList);
+      this.updateDbSalaryDetail(this.state.salaryDetail);
     });
   }
   addDateRange(sd, ed) {
     const salaryDetail = this.state.salaryDetail;
     const memberList = this.state.memberList;
+    const newSalaryDetail = [...salaryDetail];
     const initialInfo = memberList.map((member) => ({
       name: member,
       salary: 0,
@@ -55,22 +79,32 @@ export default class SalaryManagement extends Component {
       isReceived: false,
       remarks: ''
     }));
-    salaryDetail.push({
-      sd: sd,
-      ed: ed,
+    newSalaryDetail.push({
+      sd: moment(sd).format('YYYY-MM-DD'),
+      ed: moment(ed).format('YYYY-MM-DD'),
       info: initialInfo
     });
     this.setState({
-      salaryDetail: salaryDetail,
+      salaryDetail: newSalaryDetail,
       isAddingDate: false
+    }, () => {
+      this.updateDbSalaryDetail(this.state.salaryDetail);
     });
   }
   updateDateRange(detailIndex, type, value) {
     const salaryDetail = this.state.salaryDetail;
-    salaryDetail[detailIndex][type] = value;
-    this.setState({
-      salaryDetail: salaryDetail
+    const newSalaryDetail = update(salaryDetail, {
+      [detailIndex]: {
+        [type]: {
+          $set: moment(value).format('YYYY-MM-DD')
+        }
+      }
     })
+    this.setState({
+      salaryDetail: newSalaryDetail
+    }, () => {
+      this.updateDbSalaryDetail(this.state.salaryDetail);
+    });
   }
   updateDetailInfo(detailIndex, memberIndex, type, value) {
     const salaryDetail = this.state.salaryDetail;
@@ -87,21 +121,27 @@ export default class SalaryManagement extends Component {
     });
     this.setState({
       salaryDetail: newSalaryDetail
-    })
+    }, () => {
+      this.updateDbSalaryDetail(this.state.salaryDetail);
+    });
   }
   updateMemberList(memberIndex, member) {
     const memberList = this.state.memberList;
     const salaryDetail = this.state.salaryDetail;
     let newSalaryDetail = [];
-    memberList[memberIndex] = member;
+    const newMemberList = [...memberList];
     newSalaryDetail = salaryDetail.map((detail) => {
       detail.info[memberIndex].name = member;
       return detail;
-    })
+    });
+    newMemberList[memberIndex] = member;
     this.setState({
-      memberList: memberList,
+      memberList: newMemberList,
       salaryDetail: newSalaryDetail
-    })
+    }, () => {
+      this.updateDbMemberList(this.state.memberList);
+      this.updateDbSalaryDetail(this.state.salaryDetail);
+    });
   }
   mountDateInput() {
     this.setState({
@@ -124,13 +164,39 @@ export default class SalaryManagement extends Component {
     })
   }
   componentWillMount() {
-    this.addDateRange(moment('2018-07-10'), moment('2018-07-12'));
-    this.addDateRange(moment('2018-07-10'), moment('2018-07-12'));
-    this.addDateRange(moment('2018-07-10'), moment('2018-07-12'));
+    const dbMembers = firebase.database().ref('/members');
+    const memberList = [];
+    dbMembers.once('value', (snapshot) => {
+      snapshot.forEach((member) => {
+        memberList.push(member.val());
+      });
+      this.setState({
+        memberList: memberList
+      });
+    });
+    const dbSalaryDetail = firebase.database().ref('/salary-detail');
+    const salaryDetail = [];
+    dbSalaryDetail.once('value', (snapshot) => {
+      snapshot.forEach((detail) => {
+        salaryDetail.push(detail.val());
+      });
+      this.setState({
+        salaryDetail: salaryDetail,
+        isLoading: false
+      });
+    });
   }
   render() {
     return (
       <div>
+        {
+          this.state.isLoading ?
+            <div id="loader">
+              <div className="loading-image">
+              </div><div className="loading-text">Loading</div>
+            </div> :
+            null
+        }
         <div className="add-input-container">
           <input type="button" value="NEW DATE" onClick={this.mountDateInput} />
           <input type="button" value="NEW MEMBER" onClick={this.mountMemberInput} />

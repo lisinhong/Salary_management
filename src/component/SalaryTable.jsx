@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
 
 export default class SalaryTable extends Component {
   constructor(props) {
@@ -8,15 +9,6 @@ export default class SalaryTable extends Component {
     this.state = {
       dateRangeList: [],
     };
-    this.addDateRange = this.addDateRange.bind(this);
-  }
-  addDateRange(range) {
-    let arr = this.state.dateRangeList;
-    arr.push(range);
-    this.setState({
-      dateRangeList: arr,
-      isAddingDateRange: false
-    });
   }
   render() {
     const salaryDetail = this.props.salaryDetail;
@@ -33,7 +25,7 @@ export default class SalaryTable extends Component {
                     <div>
                       <DatePicker
                         onChange={(date) => { this.props.updateDateRange(detailIndex, 'sd', date) }}
-                        selected={detail.sd}
+                        selected={moment(detail.sd)}
                         placeholderText='Start Date'
                         dateFormat='YYYY-MM-DD' />
                     </div>
@@ -41,7 +33,7 @@ export default class SalaryTable extends Component {
                     <div>
                       <DatePicker
                         onChange={(date) => { this.props.updateDateRange(detailIndex, 'ed', date) }}
-                        selected={detail.ed}
+                        selected={moment(detail.ed)}
                         placeholderText='End Date'
                         dateFormat='YYYY-MM-DD' />
                     </div>
@@ -56,11 +48,11 @@ export default class SalaryTable extends Component {
                 memberList.map((member, memberIndex) => {
                   return (
                     <div key={`member-${memberIndex}`}>
-                      <input 
-                      type="text"
-                      value={member}
-                      placeholder="Member Name"
-                      onChange={(e) => {this.props.updateMemberList(memberIndex, e.target.value)}} />
+                      <input
+                        type="text"
+                        value={member}
+                        placeholder="Member Name"
+                        onChange={(e) => { this.props.updateMemberList(memberIndex, e.target.value) }} />
                     </div>
                   )
                 })
@@ -81,13 +73,13 @@ export default class SalaryTable extends Component {
                           </p>
                           <p>Is sent:
                             <input type="checkbox"
-                              value={info.isSent} onChange={(e) => {
-                                this.props.updateDetailInfo(detailIndex, infoIndex, 'isSent', e.target.checked)
+                              checked={info.isSent} onChange={(e) => {
+                                this.props.updateDetailInfo(detailIndex, infoIndex, 'isSent', e.target.checked);
                               }} />
                           </p>
                           <p>Is received:
-                            <input type="checkbox" value={info.isReceived}
-                              onChange={(e) => {
+                            <input type="checkbox"
+                              checked={info.isReceived} onChange={(e) => {
                                 this.props.updateDetailInfo(detailIndex, infoIndex, 'isReceived', e.target.checked)
                               }} />
                           </p>

@@ -6,20 +6,13 @@ export default class MemberInput extends Component {
     this.state = {
       inputValue: ''
     },
-      this.addMember = this.addMember.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-  handleInputChange(e) {
-    this.setState({
-      inputValue: e.target.value
-    })
+    this.addMember = this.addMember.bind(this);
   }
   addMember(e) {
     e.preventDefault();
     const name = this.state.inputValue;
     this.props.addMember(name);
   }
-
   render() {
     return (
       <div className="member-input-container">

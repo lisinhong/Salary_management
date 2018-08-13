@@ -31,12 +31,6 @@ export default class DateRange extends Component {
     const ed = this.state.ed;
     this.props.addDateRange(sd, ed);
   }
-  componentDidMount() {
-    console.log('component did mount');
-  }
-  componentWillUnmount() {
-    console.log('component will unmount');
-  }
   render() {
     return (
       <div className="date-input-container">

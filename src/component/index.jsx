@@ -1,8 +1,8 @@
-import '../style/style.sass';
+import './../images/favicon.png'
+import './../style/style.sass';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Demo from './SalaryManagement.jsx';
-import './../images/favicon.png'
+import SalaryManagement from './SalaryManagement.jsx';
 
 
-ReactDOM.render(<Demo />, document.getElementById('main'))
+ReactDOM.render(<SalaryManagement />, document.getElementById('main'))
